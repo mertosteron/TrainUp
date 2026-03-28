@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TrainUp — Decentralized Federated AI Training on Monad Blockchain.">
+  <title>TrainUp | Decentralized AI Training</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- Background Effects -->
+  <div class="bg-orb"></div>
+  <div class="bg-orb"></div>
+  <div class="bg-orb"></div>
+  <div class="bg-orb"></div>
+  <div class="bg-vignette"></div>
+
+  <!-- Toast -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Wallet Modal -->
+  <div class="modal-overlay" id="walletModal">
+    <div class="modal">
+      <div class="modal-close" onclick="closeWalletModal()">✕</div>
+      <div class="modal-title">Connect Wallet</div>
+      <p class="modal-desc">Connect to Monad Testnet</p>
+      <div class="wallet-option" onclick="connectWallet('metamask')">
+        <span class="wallet-emoji">🦊</span>
+        <div><div class="wallet-name">MetaMask</div><div class="wallet-desc">Browser wallet</div></div>
+        <span class="wallet-arrow">→</span>
+      </div>
+      <div class="wallet-option" onclick="connectWallet('walletconnect')">
+        <span class="wallet-emoji">🔗</span>
+        <div><div class="wallet-name">WalletConnect</div><div class="wallet-desc">Mobile wallet</div></div>
+        <span class="wallet-arrow">→</span>
+      </div>
+      <button class="btn btn-ghost" style="width:100%;margin-top:16px" onclick="closeWalletModal()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ===== APP ===== -->
+  <div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header-left">
+        <div class="logo">
+          <span class="logo-mark">▲</span>
+          <span class="logo-text">TrainUp</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="net-status disconnected" id="networkStatus">
+          <span class="net-dot"></span>
+          <span id="networkStatusText">Disconnected</span>
+        </div>
+        <button class="btn btn-accent" id="walletBtn" onclick="openWalletModal()">
+          <span id="walletBtnText">Connect Wallet</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+      <h2 class="hero-title">Decentralized AI Training Protocol</h2>
+      <p class="hero-desc">Train your AI models using a decentralized network of compute nodes on Monad Blockchain. Secure, verifiable, and incentivized.</p>
+    </section>
+
+    <!-- ROLE TABS -->
+    <div class="role-tabs">
+      <button class="role-tab active" id="tabOwner" onclick="switchRole('owner')">
+        <span class="role-icon">🧠</span> Model Owner
+      </button>
+      <button class="role-tab" id="tabNode" onclick="switchRole('node')">
+        <span class="role-icon">⚡</span> Node Operator
+      </button>
+    </div>
+
+    <!-- ============ MODEL OWNER VIEW ============ -->
+    <div class="role-view" id="viewOwner">
+
+      <!-- Owner Metrics -->
+      <div class="metrics-row">
+        <div class="stat-card">
+          <div class="stat-label">Active Models</div>
+          <div class="stat-value" id="ownerModels">3</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Best Accuracy</div>
+          <div class="stat-value" id="ownerAccuracy">87.3%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Rounds</div>
+          <div class="stat-value" id="ownerRounds">47</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Spent</div>
+          <div class="stat-value" id="ownerSpent">24.5 MON</div>
+        </div>
+      </div>
+
+      <!-- Owner: My Models -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">My Models</h3>
+          <span class="badge green">3 Active</span>
+        </div>
+        <div class="card-body no-pad">
+          <div id="ownerModelList"></div>
+        </div>
+      </div>
+
+      <!-- Owner: Training Progress -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Training Progress</h3>
+          <span class="badge peach">Round #47</span>
+        </div>
+        <div class="card-body">
+          <div class="progress-section">
+            <div class="progress-info">
+              <span>ResNet-50 — CIFAR-10</span>
+              <span class="progress-pct" id="trainingPct">62%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar" id="trainingBar" style="width:62%"></div>
+            </div>
+            <div class="progress-meta">
+              <span>23 nodes contributing</span>
+              <span>Accuracy: 87.3%</span>
+            </div>
+          </div>
+          <div class="mini-chart-row" id="accuracyChart"></div>
+        </div>
+      </div>
+
+      <!-- Owner: Smart Contracts -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Smart Contracts</h3>
+          <span class="badge green">Deployed</span>
+        </div>
+        <div class="card-body no-pad">
+          <div class="contract-row">
+            <div class="contract-label">Task Registry</div>
+            <code class="contract-addr" id="taskContractAddr">0x7B3F...C3B2</code>
+          </div>
+          <div class="contract-row">
+            <div class="contract-label">Staking</div>
+            <code class="contract-addr" id="stakeContractAddr">0x4C1D...E5F7</code>
+          </div>
+          <div class="contract-row">
+            <div class="contract-label">Aggregator</div>
+            <code class="contract-addr" id="aggregatorContractAddr">0x9B59...F3A5</code>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============ NODE OPERATOR VIEW ============ -->
+    <div class="role-view hidden" id="viewNode">
+
+      <!-- Node Metrics -->
+      <div class="metrics-row">
+        <div class="stat-card">
+          <div class="stat-label">Earned</div>
+          <div class="stat-value" id="nodeEarned">142.8 MON</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Tasks Done</div>
+          <div class="stat-value" id="nodeTasks">46</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Uptime</div>
+          <div class="stat-value" id="nodeUptime">99.2%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Staked</div>
+          <div class="stat-value" id="nodeStaked">25.0 MON</div>
+        </div>
+      </div>
+
+      <!-- Node: Available Tasks -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Available Tasks</h3>
+          <span class="badge peach" id="taskCount">4 Tasks</span>
+        </div>
+        <div class="card-body no-pad">
+          <div id="taskList"></div>
+        </div>
+      </div>
+
+      <!-- Node: Reward Center -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Rewards</h3>
+          <span class="badge yellow" id="rewardBadge">Pending</span>
+        </div>
+        <div class="card-body">
+          <div class="reward-section">
+            <div class="reward-big" id="rewardDisplay">142.847 MON</div>
+            <div class="reward-row">
+              <div class="reward-item">
+                <div class="reward-val" id="claimedReward">98.200</div>
+                <div class="reward-lbl">Claimed</div>
+              </div>
+              <div class="reward-divider"></div>
+              <div class="reward-item">
+                <div class="reward-val" id="pendingReward">44.647</div>
+                <div class="reward-lbl">Pending</div>
+              </div>
+              <div class="reward-divider"></div>
+              <div class="reward-item">
+                <div class="reward-val" id="completedTasks">46</div>
+                <div class="reward-lbl">Tasks</div>
+              </div>
+            </div>
+            <button class="btn btn-accent btn-lg" id="claimBtn" onclick="claimRewards()">Claim Rewards</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Node: Network -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Network</h3>
+          <span class="badge green" id="networkNodeCount">23 Nodes</span>
+        </div>
+        <div class="card-body no-pad">
+          <div class="canvas-wrap">
+            <canvas id="networkCanvas"></canvas>
+            <div class="canvas-legend-row">
+              <span class="legend-item"><span class="ldot" style="background:#FFAB91"></span> GPU</span>
+              <span class="legend-item"><span class="ldot" style="background:#81C784"></span> Mobile</span>
+              <span class="legend-item"><span class="ldot" style="background:#90CAF9"></span> Server</span>
+              <span class="legend-item"><span class="ldot" style="background:#FFD54F"></span> Aggregator</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ACTIVITY (shared) -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Activity</h3>
+        <span class="badge red-dot">Live</span>
+      </div>
+      <div class="card-body no-pad">
+        <div class="activity-feed" id="activityFeed"></div>
+      </div>
+    </div>
+
+  </div><!-- end app -->
+
+  <!-- Node Tooltip -->
+  <div class="node-tooltip" id="nodeTooltip">
+    <div class="tooltip-title" id="tooltipTitle"></div>
+    <div id="tooltipContent"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

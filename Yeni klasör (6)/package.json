@@ -1,0 +1,22 @@
+{
+  "name": "monad-fl-coordinator",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Monad Blockchain Federated Learning Coordinator",
+  "scripts": {
+    "compile": "npx hardhat compile",
+    "deploy": "npx hardhat run scripts/deploy.js --network monadTestnet",
+    "test": "npx hardhat test"
+  },
+  "keywords": [
+    "monad",
+    "federated-learning",
+    "blockchain",
+    "solidity"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.28.6"
+  }
+}
